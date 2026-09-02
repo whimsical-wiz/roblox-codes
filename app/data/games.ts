@@ -16,11 +16,7 @@ export const games = [
   "Enter a working code.",
   "Press Redeem.",
 ],
-    codes: [
-      "KITT_RESET",
-      "SUB2GAMERROBOT_RESET1",
-      "FUDD10",
-    ],
+    
     expired: [
       "BIGNEWS",
       "UPDATE10",
@@ -37,11 +33,7 @@ export const games = [
     updated: "Today",
     description:
   "Blue Lock Rivals is a Roblox soccer game inspired by the Blue Lock anime. Master unique abilities, compete in intense matches, and become the ultimate striker by defeating players from around the world.",
-    codes: [
-      "NELREO",
-      "FLOWSTATE",
-      "EGOIST",
-    ],
+    
     expired: [
       "LOCKOFF",
     ],
@@ -50,18 +42,15 @@ export const games = [
   {
     id: "anime-rangers-x",
     name: "Anime Rangers X",
-    universeId: 6884266247,
+    universeId: 9774981774,
     image: "/games/animeranger.jpg",
     players: "98K",
     rating: "95%",
     updated: "1 hour ago",
     description:
   "Anime Rangers X is a Roblox tower defense game where players collect and upgrade anime-inspired characters to defend against waves of enemies. Build the strongest team and complete challenging stages for exclusive rewards.",
-    codes: [
-      "RANGERS",
-      "LEVELUP",
-      "LUCKY",
-    ],
+    
+    
     expired: [
       "UPDATE1",
     ],

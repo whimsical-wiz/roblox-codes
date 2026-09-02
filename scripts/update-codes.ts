@@ -1,5 +1,65 @@
 const SOURCE_URL = "https://bloxfruitswiki.org/wiki/codes/";
 
+const BLR_SOURCE_URL = "https://beebom.com/blue-lock-rivals-codes/";
+const ARX_SOURCE_URL = "https://beebom.com/anime-rangers-x-codes/";
+async function fetchBeebomPage(url: string) {
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151.0.0.0 Safari/537.36",
+      "Accept":
+        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch Beebom source: ${response.status}`);
+  }
+
+  return await response.text();
+}
+function extractBeebomCodes(
+  html: string,
+  activeHeading: string,
+  expiredHeading: string
+) {
+  const activeStart = html.indexOf(activeHeading);
+  const expiredStart = html.indexOf(expiredHeading);
+
+  if (activeStart === -1) {
+    throw new Error(`Could not find active codes heading: ${activeHeading}`);
+  }
+
+  if (expiredStart === -1) {
+    throw new Error(`Could not find expired codes heading: ${expiredHeading}`);
+  }
+
+  const activeHtml = html.slice(activeStart, expiredStart);
+
+  const nextHeading = html.indexOf(
+    "<h2",
+    expiredStart + expiredHeading.length
+  );
+
+  const expiredHtml = html.slice(
+    expiredStart,
+    nextHeading === -1 ? html.length : nextHeading
+  );
+
+  const activeCodes = [
+  ...activeHtml.matchAll(/<li>\s*<strong>([^<]+)<\/strong>/gi),
+].map((match) => match[1].trim());
+
+  const expiredCodes = [
+    ...expiredHtml.matchAll(/<li>([^<]+)<\/li>/gi),
+  ].map((match) => match[1].trim());
+
+  return {
+    activeCodes: [...new Set(activeCodes)],
+    expiredCodes: [...new Set(expiredCodes)],
+  };
+}
+
 async function updateCodes() {
   const response = await fetch(SOURCE_URL, {
   headers: {
@@ -17,6 +77,30 @@ async function updateCodes() {
 
   console.log("Source fetched successfully!");
   console.log(`Downloaded ${html.length} characters.`);
+  const blrHtml = await fetchBeebomPage(BLR_SOURCE_URL);
+
+console.log("BLR source fetched successfully!");
+console.log(`Downloaded ${blrHtml.length} BLR characters.`);
+const blrCodes = extractBeebomCodes(
+  blrHtml,
+  "All New Blue Lock Rivals Codes",
+  "Expired Blue Lock Rivals Codes"
+);
+const arxHtml = await fetchBeebomPage(ARX_SOURCE_URL);
+
+console.log("ARX source fetched successfully!");
+console.log(`Downloaded ${arxHtml.length} ARX characters.`);
+
+const arxCodes = extractBeebomCodes(
+  arxHtml,
+  "All New Re Rangers X Codes",
+  "Expired Re Rangers X Codes"
+);
+
+console.log("ARX active codes:", arxCodes.activeCodes);
+console.log("ARX expired codes:", arxCodes.expiredCodes);
+
+
 
   // --------------------------------
   // 1. Find Working Codes section
@@ -112,12 +196,15 @@ async function updateCodes() {
   const fs = await import("fs/promises");
   const path = await import("path");
 
-  const codesPath = path.join(
-    process.cwd(),
-    "app",
-    "data",
-    "codes.ts"
-  );
+ const codesPath = path.join(
+  process.cwd(),
+  "app",
+  "data",
+  "codes.ts"
+);
+
+console.log("WRITING TO:", codesPath);
+
 
   // --------------------------------
   // 7. Generate the complete codes.ts
@@ -128,17 +215,13 @@ async function updateCodes() {
 ${finalWorkingCodes.map((code) => `    "${code}"`).join(",\n")}
   ],
 
-  "blue-lock-rivals": [
-    "NELREO",
-    "FLOWSTATE",
-    "EGOIST",
-  ],
+ "blue-lock-rivals": [
+${blrCodes.activeCodes.map((code) => `    "${code}"`).join(",\n")}
+],
 
-  "anime-rangers-x": [
-    "RANGERS",
-    "LEVELUP",
-    "LUCKY",
-  ],
+ "anime-rangers-x": [
+${arxCodes.activeCodes.map((code) => `    "${code}"`).join(",\n")}
+],
 };
 
 export const expiredCodes = {
@@ -147,12 +230,12 @@ ${expiredCodes.map((code) => `    "${code}"`).join(",\n")}
   ],
 
   "blue-lock-rivals": [
-    "LOCKOFF",
-  ],
+${blrCodes.expiredCodes.map((code) => `    "${code}"`).join(",\n")}
+],
 
   "anime-rangers-x": [
-    "UPDATE1",
-  ],
+${arxCodes.expiredCodes.map((code) => `    "${code}"`).join(",\n")}
+],
 };
 `;
 

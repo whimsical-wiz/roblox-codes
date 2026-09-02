@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GameThumbnail from "@/app/components/GameThumbnail";
 import { notFound, useParams } from "next/navigation";
 import { games } from "@/app/data/games";
@@ -19,6 +19,17 @@ export default function GamePage() {
     notFound();
   }
   const [copied, setCopied] = useState("");
+  const [playerCount, setPlayerCount] = useState(0);
+  useEffect(() => {
+  fetch("/api/games/players")
+    .then((response) => response.json())
+    .then((data) => {
+      setPlayerCount(data[String(game.universeId)] ?? 0);
+    })
+    .catch((error) =>
+      console.error("Failed to fetch player count:", error)
+    );
+}, [game.universeId]);
 
   
 
@@ -46,7 +57,7 @@ export default function GamePage() {
 
       <div className="rounded-xl bg-slate-900 px-5 py-3 border border-slate-800">
         <p className="text-gray-400 text-sm">Players</p>
-        <p className="font-bold text-xl">{game.players}</p>
+        <p className="font-bold text-xl">{playerCount.toLocaleString()}</p>
       </div>
 
       <div className="rounded-xl bg-slate-900 px-5 py-3 border border-slate-800">

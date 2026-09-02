@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { games } from "./data/games";
 import { codes } from "@/app/data/codes";
 import GameCard from "./components/GameCard";
@@ -8,7 +8,17 @@ import GameCard from "./components/GameCard";
 export default function Home() {
  const [selectedGame, setSelectedGame] = useState<(typeof games)[number] | null>(null);
 const [copiedCode, setCopiedCode] = useState("");
-const [search, setSearch] = useState(""); 
+const [search, setSearch] = useState("");
+const [playerCounts, setPlayerCounts] = useState<Record<string, number>>({});
+useEffect(() => {
+  fetch("/api/games/players")
+    .then((response) => response.json())
+    .then((data) => {
+  console.log("PLAYER COUNTS:", data);
+  setPlayerCounts(data);
+})
+    .catch((error) => console.error("Failed to fetch player counts:", error));
+}, []);
 const filteredGames = games.filter((game) =>
   game.name.toLowerCase().includes(search.toLowerCase())
 );
@@ -77,6 +87,7 @@ const filteredGames = games.filter((game) =>
   key={game.id}
   game={game}
   codes={codes[game.id as keyof typeof codes] ?? []}
+  playerCount={playerCounts[String(game.universeId)] ?? 0}
   onClick={() => setSelectedGame(game)}
 />
 ))}
