@@ -27,11 +27,9 @@ export const codes = {
   ],
 
  "blue-lock-rivals": [
-    "INSANETRAILERSOON",
-    "DESTROYERMODE",
-    "RINTODAY",
-    "FIXESLATERTODAY",
-    "SORRY4DELAY!!"
+    "UBERSTAKEOVER",
+    "KINGNEXTWEEK",
+    "EGODEFENSE"
 ],
 
  "anime-rangers-x": [
@@ -112,6 +110,11 @@ export const expiredCodes = {
   ],
 
   "blue-lock-rivals": [
+    "INSANETRAILERSOON",
+    "SORRY4DELAY!!",
+    "FIXESLATERTODAY",
+    "RINTODAY",
+    "DESTROYERMODE",
     "SAEREWORK",
     "HALFBAKED",
     "RINSOON",
