@@ -27,9 +27,10 @@ export const codes = {
   ],
 
  "blue-lock-rivals": [
-    "UBERSTAKEOVER",
-    "KINGNEXTWEEK",
-    "EGODEFENSE"
+    "NELKING",
+    "NIKOSOON",
+    "UBERSMONTH",
+    "SORRYLOADING"
 ],
 
  "anime-rangers-x": [
@@ -110,6 +111,9 @@ export const expiredCodes = {
   ],
 
   "blue-lock-rivals": [
+    "UBERSTAKEOVER",
+    "KINGNEXTWEEK",
+    "EGODEFENSE",
     "INSANETRAILERSOON",
     "SORRY4DELAY!!",
     "FIXESLATERTODAY",
